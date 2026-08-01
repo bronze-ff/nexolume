@@ -1,0 +1,32 @@
+# === SEGREDOS — repositório é PÚBLICO, nada disso pode entrar ===
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.cloudflared/
+credentials.json
+
+# === Dependências e build ===
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# === Conteúdo capturado ===
+# Clippings e transcrições são conteúdo de terceiros. Fixtures de teste vivem em
+# packages/*/test/fixtures/ e entram no git deliberadamente, uma a uma.
+/tmp/
+/output/
+*.dump
+*.sql.gz
+
+# === Ambiente e ferramentas ===
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+!.vscode/extensions.json
