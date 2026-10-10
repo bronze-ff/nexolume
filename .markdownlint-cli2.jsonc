@@ -1,0 +1,17 @@
+{
+  "globs": ["**/*.md"],
+  "ignores": ["node_modules/**", "CLAUDE.md"],
+  "config": {
+    "default": true,
+    "MD013": false, // linha longa: a spec e o plano são prosa já aprovada
+    "MD024": {
+      "siblings_only": true
+    },
+    "MD033": false,
+    "MD034": false,
+    "MD040": false,
+    "MD032": false, // lista colada no parágrafo, no plano de 2026-08-01
+    "MD036": false, // negrito usado como título na autorrevisão do plano
+    "MD060": false // tabela compacta na spec e no plano
+  }
+}
