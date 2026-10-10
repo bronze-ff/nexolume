@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const root = process.cwd();
 const errors = [];
@@ -15,7 +16,15 @@ function walk(dir) {
   return out;
 }
 
-function visibleLines(markdown) {
+function stripInlineCode(line) {
+  return line.replace(/`[^`\n]*`/g, '');
+}
+
+function unwrapInlineCode(line) {
+  return line.replace(/`([^`\n]*)`/g, '$1');
+}
+
+function visibleLines(markdown, transform) {
   const lines = markdown.split(/\r?\n/);
   const visible = [];
   let fence = null;
@@ -34,7 +43,7 @@ function visibleLines(markdown) {
         continue;
       }
     }
-    visible.push(fence ? '' : line.replace(/`[^`\n]*`/g, ''));
+    visible.push(fence ? '' : transform(line));
   }
   return visible;
 }
@@ -64,11 +73,10 @@ function githubSlug(text) {
 const files = walk(root);
 const headings = new Map();
 
-function headingSlugs(file) {
-  if (headings.has(file)) return headings.get(file);
+export function headingSlugsFrom(markdown) {
   const slugs = new Set();
   const counts = new Map();
-  for (const line of visibleLines(readFileSync(file, 'utf8'))) {
+  for (const line of visibleLines(markdown, unwrapInlineCode)) {
     const heading = /^(#{1,6})\s+(.+?)\s*#*\s*$/.exec(line);
     if (!heading) continue;
     const base = githubSlug(heading[2]);
@@ -76,54 +84,66 @@ function headingSlugs(file) {
     counts.set(base, seen + 1);
     slugs.add(seen === 0 ? base : `${base}-${seen}`);
   }
+  return slugs;
+}
+
+function headingSlugs(file) {
+  if (headings.has(file)) return headings.get(file);
+  const slugs = headingSlugsFrom(readFileSync(file, 'utf8'));
   headings.set(file, slugs);
   return slugs;
 }
 
-for (const file of files) {
-  const lines = visibleLines(readFileSync(file, 'utf8'));
-  lines.forEach((line, index) => {
-    for (const raw of linksIn(line)) {
-      if (isSkippable(raw)) continue;
-      const [beforeQuery] = raw.split('?');
-      const hash = beforeQuery.indexOf('#');
-      const pathPart = hash === -1 ? beforeQuery : beforeQuery.slice(0, hash);
-      const fragment = hash === -1 ? '' : decodeURIComponent(beforeQuery.slice(hash + 1));
-      let target;
-      if (pathPart === '') {
-        target = file;
-      } else {
-        const decoded = decodeURIComponent(pathPart);
-        target = decoded.startsWith('/')
-          ? resolve(root, `.${decoded}`)
-          : resolve(dirname(file), decoded);
+function main() {
+  for (const file of files) {
+    const lines = visibleLines(readFileSync(file, 'utf8'), stripInlineCode);
+    lines.forEach((line, index) => {
+      for (const raw of linksIn(line)) {
+        if (isSkippable(raw)) continue;
+        const [beforeQuery] = raw.split('?');
+        const hash = beforeQuery.indexOf('#');
+        const pathPart = hash === -1 ? beforeQuery : beforeQuery.slice(0, hash);
+        const fragment = hash === -1 ? '' : decodeURIComponent(beforeQuery.slice(hash + 1));
+        let target;
+        if (pathPart === '') {
+          target = file;
+        } else {
+          const decoded = decodeURIComponent(pathPart);
+          target = decoded.startsWith('/')
+            ? resolve(root, `.${decoded}`)
+            : resolve(dirname(file), decoded);
+        }
+        const rel = relative(root, target);
+        if (rel.startsWith('..') || rel.split(sep).includes('..')) {
+          errors.push(`${relative(root, file)}:${index + 1}: link fora do repositório: ${raw}`);
+          continue;
+        }
+        let exists = false;
+        try {
+          exists = statSync(target).isFile();
+        } catch {
+          exists = false;
+        }
+        if (!exists) {
+          errors.push(`${relative(root, file)}:${index + 1}: arquivo não encontrado: ${raw}`);
+          continue;
+        }
+        if (fragment && target.endsWith('.md') && !headingSlugs(target).has(githubSlug(fragment))) {
+          errors.push(`${relative(root, file)}:${index + 1}: âncora não encontrada: ${raw}`);
+        }
       }
-      const rel = relative(root, target);
-      if (rel.startsWith('..') || rel.split(sep).includes('..')) {
-        errors.push(`${relative(root, file)}:${index + 1}: link fora do repositório: ${raw}`);
-        continue;
-      }
-      let exists = false;
-      try {
-        exists = statSync(target).isFile();
-      } catch {
-        exists = false;
-      }
-      if (!exists) {
-        errors.push(`${relative(root, file)}:${index + 1}: arquivo não encontrado: ${raw}`);
-        continue;
-      }
-      if (fragment && target.endsWith('.md') && !headingSlugs(target).has(githubSlug(fragment))) {
-        errors.push(`${relative(root, file)}:${index + 1}: âncora não encontrada: ${raw}`);
-      }
-    }
-  });
+    });
+  }
+
+  if (errors.length > 0) {
+    console.error(errors.join('\n'));
+    console.error(`\n${errors.length} link(s) interno(s) quebrado(s).`);
+    process.exit(1);
+  }
+
+  console.log(`Links internos ok (${files.length} arquivo(s) markdown).`);
 }
 
-if (errors.length > 0) {
-  console.error(errors.join('\n'));
-  console.error(`\n${errors.length} link(s) interno(s) quebrado(s).`);
-  process.exit(1);
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
 }
-
-console.log(`Links internos ok (${files.length} arquivo(s) markdown).`);

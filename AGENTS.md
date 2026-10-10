@@ -24,8 +24,8 @@ npm ci
 npm run verify
 ```
 
-`verify` roda o lint de Markdown e a checagem de links internos. É o mesmo comando do
-job `docs` na CI. Não existe `npm test` nem `npm run build`.
+`verify` roda o lint de Markdown, a checagem de links internos e o teste dessa
+checagem. É o mesmo comando do job `docs` na CI. Não existe `npm run build`.
 
 A CI também roda o gitleaks só nos commits novos do PR (job `gitleaks`). Não há
 secret no workflow.
@@ -58,7 +58,8 @@ nem `intelligence`.
 - Fazer merge, ou commitar direto na `main`. O merge é do Filippe.
 - Comentar `@codex review` ou `@codex fix`. O review automático já cobre o PR, e um
   comentário vindo de automação é ignorado.
-- Abrir ou citar trabalho no Linear. Não use identificador `FIL-`.
+- Citar trabalho fora das GitHub Issues deste repositório. A referência é `#n` ou
+  `Fixes #n`.
 - Adicionar Sentry, PostHog ou outro SDK. Não há aplicação.
 - Tratar o plano de 2026-08-01 como pedido para recriar docs com nome em inglês.
 - Mexer em migração já aplicada. Ainda não existe migração; quando existir, o
@@ -87,7 +88,8 @@ achado P0/P1 em aberto) e com os jobs `docs` e `gitleaks` verdes.
   existir.
 - P0: saída de LLM aceita sem validação por schema, quando o código existir.
 - P1: `CLAUDE.md` com qualquer conteúdo além de `@AGENTS.md`.
-- P1: menção a Linear ou identificador `FIL-`. A referência é `#n` / `Fixes #n`.
+- P1: issue citada fora das GitHub Issues deste repositório. A referência é `#n`
+  ou `Fixes #n`.
 - P1: action em tag flutuante (`@v4`, `@main`) ou imagem `:latest` no workflow.
 - P1: Sentry, PostHog ou outro SDK enquanto este repositório não tiver aplicação
   deployável.

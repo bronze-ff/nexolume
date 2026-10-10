@@ -17,7 +17,7 @@ em `ubuntu-24.04`, com concurrency cancelando a run antiga do mesmo ref:
 
 | Job | O que faz | Limite |
 | --- | --- | --- |
-| `docs` | `npm ci` com cache e `npm run verify` (lint de Markdown e links internos) | 5 min |
+| `docs` | `npm ci` com cache e `npm run verify` (lint, links internos e o teste deles) | 5 min |
 | `gitleaks` | `gitleaks` v8.30.1 só no intervalo de commits novos do PR ou do push | 5 min |
 
 Links externos não são buscados: a checagem confirma arquivo e âncora dentro do
@@ -39,9 +39,9 @@ desfazer.
 
 ## Issues
 
-GitHub Issues deste repositório. Templates em `.github/ISSUE_TEMPLATE/`. Labels
-usadas pelos templates: `bug` e `feature`. Também faz sentido ter `chore` quando a
-issue for criada à mão. Não há fila no Linear.
+GitHub Issues deste repositório. Uma mudança cita a issue com `#n` ou `Fixes #n`.
+Templates em `.github/ISSUE_TEMPLATE/`. Labels usadas pelos templates: `bug` e
+`feature`. Também faz sentido ter `chore` quando a issue for criada à mão.
 
 ## Segredos
 

@@ -25,7 +25,7 @@ Não há aplicação. Sentry e PostHog não têm o que observar.
    `docs/superpowers/`. Nada foi movido: já estavam sob `docs/`, e o inventário desta
    onda não pedia mudança de caminho.
 3. Issues ficam nas GitHub Issues de `bronze-ff/nexolume`. Referência `#n` e
-   `Fixes #n`. Não se usa Linear nem identificador `FIL-`.
+   `Fixes #n`.
 4. Todo PR passa pelo Codex Review automático. Merge só com review limpa (sem P0/P1
    em aberto) e CI verde. Quem mergeia é o Filippe. Agentes não comentam
    `@codex review`.
