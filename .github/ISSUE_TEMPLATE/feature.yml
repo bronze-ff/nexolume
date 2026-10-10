@@ -1,0 +1,17 @@
+name: Feature
+description: Mudança de produto ou de documentação
+title: "feature: "
+labels: [feature]
+body:
+  - type: textarea
+    id: pedido
+    attributes:
+      label: O que deve passar a ser verdade
+    validations:
+      required: true
+  - type: textarea
+    id: aceite
+    attributes:
+      label: Como saber que ficou pronto
+    validations:
+      required: true

@@ -1,0 +1,16 @@
+{
+  "name": "nexolume",
+  "private": true,
+  "description": "Documentação do Nexolume. A aplicação da Fatia 1 ainda não está neste repositório.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint:md": "markdownlint-cli2",
+    "lint:links": "node scripts/check-md-links.mjs",
+    "verify": "npm run lint:md && npm run lint:links"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "0.23.3"
+  }
+}
