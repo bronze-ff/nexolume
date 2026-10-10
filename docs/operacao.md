@@ -12,8 +12,8 @@ npm ci
 npm run verify
 ```
 
-O workflow [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) tem dois jobs,
-com concurrency cancelando a run antiga do mesmo ref:
+O workflow [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) tem dois jobs
+em `ubuntu-24.04`, com concurrency cancelando a run antiga do mesmo ref:
 
 | Job | O que faz | Limite |
 | --- | --- | --- |
