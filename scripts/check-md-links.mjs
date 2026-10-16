@@ -87,6 +87,15 @@ export function headingSlugsFrom(markdown) {
   return slugs;
 }
 
+/**
+ * O fragmento do link é comparado como está (já decodificado) com as âncoras
+ * geradas dos headings. Slugificar o fragmento aceitava âncoras que o GitHub
+ * não resolve, como `#Instalação` ou `#Uso!` para o heading `## Uso`.
+ */
+export function anchorExists(slugs, fragment) {
+  return slugs.has(fragment);
+}
+
 function headingSlugs(file) {
   if (headings.has(file)) return headings.get(file);
   const slugs = headingSlugsFrom(readFileSync(file, 'utf8'));
@@ -128,7 +137,7 @@ function main() {
           errors.push(`${relative(root, file)}:${index + 1}: arquivo não encontrado: ${raw}`);
           continue;
         }
-        if (fragment && target.endsWith('.md') && !headingSlugs(target).has(githubSlug(fragment))) {
+        if (fragment && target.endsWith('.md') && !anchorExists(headingSlugs(target), fragment)) {
           errors.push(`${relative(root, file)}:${index + 1}: âncora não encontrada: ${raw}`);
         }
       }
