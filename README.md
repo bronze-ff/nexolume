@@ -23,8 +23,8 @@ npm ci
 npm run verify
 ```
 
-`npm run verify` faz o lint dos Markdown e confere os links internos. A CI usa Node 24
-(`.nvmrc`). Node 22 ou mais novo também roda esses scripts.
+`npm run verify` faz o lint dos Markdown e confere os links internos. A CI usa Node
+24.22.1 (`.nvmrc`). Os scripts exigem Node `>=24.22.1`.
 
 ## Como publicar
 
