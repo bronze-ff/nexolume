@@ -3,7 +3,7 @@
   "private": true,
   "description": "Documentação do Nexolume. A aplicação da Fatia 1 ainda não está neste repositório.",
   "engines": {
-    "node": ">=22"
+    "node": ">=24.22.1"
   },
   "scripts": {
     "lint:md": "markdownlint-cli2",
@@ -12,5 +12,10 @@
   },
   "devDependencies": {
     "markdownlint-cli2": "0.23.3"
+  },
+  "overrides": {
+    "markdown-it": "15.0.3",
+    "smol-toml": "1.9.1",
+    "katex": "0.18.4"
   }
 }

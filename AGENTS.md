@@ -26,6 +26,7 @@ npm run verify
 
 `verify` roda o lint de Markdown, a checagem de links internos e o teste dessa
 checagem. É o mesmo comando do job `docs` na CI. Não existe `npm run build`.
+Node `24.22.1`, lido do `.nvmrc`. `engines.node` é `>=24.22.1`.
 
 A CI também roda o gitleaks só nos commits novos do PR (job `gitleaks`). Não há
 secret no workflow.

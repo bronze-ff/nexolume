@@ -25,6 +25,8 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
+      - name: node 24.22.1
+        run: test "$(node -v)" = "v24.22.1"
       - name: install
         run: npm ci
       - name: verify

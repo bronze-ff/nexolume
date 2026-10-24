@@ -17,7 +17,7 @@ em `ubuntu-24.04`, com concurrency cancelando a run antiga do mesmo ref:
 
 | Job | O que faz | Limite |
 | --- | --- | --- |
-| `docs` | `npm ci` com cache e `npm run verify` (lint, links internos e o teste deles) | 5 min |
+| `docs` | Confere Node 24.22.1 (`.nvmrc`), `npm ci` com cache e `npm run verify` (lint, links internos e o teste deles) | 5 min |
 | `gitleaks` | `gitleaks` v8.30.1 só no intervalo de commits novos do PR ou do push | 5 min |
 
 Links externos não são buscados: a checagem confirma arquivo e âncora dentro do
