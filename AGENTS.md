@@ -1,3 +1,5 @@
+# Regras deste repositório
+
 ## Fluxo de trabalho
 
 - **Tarefas:** GitHub Issues deste repositório. Sem issue para o que precisa de rastreio, crie uma com impacto, evidência, causa (confirmada ou hipótese) e critérios de aceite.
